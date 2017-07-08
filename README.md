@@ -4,6 +4,6 @@
 なお、コードは今見返すとひどいことになっているため、改善して上げ直すつもり。
 
 <div align="CENTER">
-<img src="https://github.com/nshhhin/Images/blob/master/pokeDict_demo.png">
+<img src="https://github.com/nshhhin/Images/blob/master/pokeDict_demo.png" width="500px" height="auto">
 <p>Fig.1 実行画面</p>
 </div>
