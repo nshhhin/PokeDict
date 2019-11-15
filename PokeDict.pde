@@ -6,68 +6,17 @@ import de.bezier.data.sql.*;
 SQLite db;
 
 String lines[];
-String select_type="選択なし";
-Button b[];
-
+String select_type = "選択なし";
+Button buttons[] = new Button[6];
+boolean load=false;
 
 void setup() {
   size(640, 480);
   background(255);
-  b = new Button[6];
-  // importB=new Button(1, 1, 200, 20, color(255, 180, 180), 0, "データベース化");
-  b[0]=new Button(20, 30, 80, 80, color(255, 0, 0, 20), 0, "ほのお");
-  b[1]=new Button(110, 30, 80, 80, color(0, 0, 255, 20), 0, "みず");
-  b[2]=new Button(20, 120, 80, 80, color(0, 255, 0, 20), 0, "くさ");
-  b[3]=new Button(110, 120, 80, 80, color(255, 2550, 0, 20), 0, "でんき");
-  b[4]=new Button(20, 210, 80, 80, color(130, 20), 0, "ノーマル");
-  b[5]=new Button(110, 210, 80, 80, color(255, 20), 0, "選択なし");
-
+  configreButtons();
   db = new SQLite( this, "mydata.db" );
 
- 
-
-  /* //インポートする時に使ったコード 
-   String line[]=loadStrings("pokemon.html");
-   int count=0;
-   lines=new String[0];
-   for (int i=0; i<line.length; i++) {
-   // println(line[i]);
-   String []m=match(line[i], "<td class=\"col_number\">(.*?)</td>.*<a href=\"http\\://www.pokemon\\-tools.com/bw/ja/pokemon/\\d{3}/\">(.{1,6})</a>.*<td class=\"col_type\">(.*?)</td>");
-   if (m != null) {
-   println(m[1]);
-   println(m[2]);
-   
-   String []type1=match(m[3], "<a href.*?>(.*?)</a>");
-   String []type2=match(m[3], "<br><a href.*?>(.*?)</a>");
-   
-   
-   if(type2 == null){
-   lines=append(lines,m[1]+","+m[2]+","+type1[1]+","+null);
-   }
-   else if(type2 != null){
-   lines=append(lines, m[1]+","+m[2]+","+type1[1]+","+type2[1]);
-   }
-   
-   count++;
-   }
-   }
-   saveStrings("data.csv", lines);
-   String hoge[]=loadStrings("data.csv");
-   if ( db.connect() ) {
-   for (int i=0; i<hoge.length; i++) {
-   String []hogehoge=split(hoge[i], ",");
-   String id=hogehoge[0];
-   String name=hogehoge[1];
-   String type1=hogehoge[2];
-   String type2=hogehoge[3];
-   String sql="INSERT INTO pokemon_table VALUES("+id+",'"+name+"','"+type1+"','"+type2+"')";
-   db.query(sql);
-   }
-   }
-   
-   */
-   
-    fill(255);
+  fill(255);
   strokeWeight(1);
   rect(1, height-100, 98, 98);
   rect(101, height-100, 98, 98);
@@ -78,16 +27,12 @@ void setup() {
     db.query(sql2);
     while (db.next ()) {
       fill(0);
-       text(db.getInt("id")+" . "+db.getString("name"), 220, 20+count*20);
-       count++;
+      text(db.getInt("id")+" . "+db.getString("name"), 220, 20+count*20);
+      count++;
     }
   }
-
- 
 }
 
-
-boolean load=false;
 void draw() {
   println(select_type);
   fill(255);
@@ -103,21 +48,21 @@ void draw() {
   text("タイプを選択", 201/2, 21/2);
   textAlign(BASELINE);
 
-  for (int i=0; i<b.length; i++) {
-    b[i].draw();
-    if (b[i].on) {
+  for (Button button : buttons) {
+    button.draw();
+
+    if (button.on) {
 
       //白rectで上書き
       fill(255);
       strokeWeight(1);
       rect(210, 1, 425, height-2);
 
-      float red=red(b[i].c);
-      float green=green(b[i].c);
-      float blue=blue(b[i].c);
-      b[i].c=color(red, green, blue, 255);
-      select_type=b[i].text; 
-
+      float red = red(button.c);
+      float green = green(button.c);
+      float blue = blue(button.c);
+      button.c = color(red, green, blue, 255);
+      select_type = button.text; 
 
       db = new SQLite( this, "mydata.db" );
       int count=0;
@@ -134,14 +79,22 @@ void draw() {
           text(db.getInt("id")+" . "+db.getString("name"), 220, 20+count*20);
           count++;
         }
-        b[i].on=false;
+        button.on=false;
       }
-    } else if (!b[i].on) {
-      float red=red(b[i].c);
-      float green=green(b[i].c);
-      float blue=blue(b[i].c);
-      b[i].c=color(red, green, blue, 100);
+    } else if (!button.on) {
+      float red = red(button.c);
+      float green = green(button.c);
+      float blue = blue(button.c);
+      button.c = color(red, green, blue, 100);
     }
   }
 }
 
+void configreButtons() {
+  buttons[0]=new Button(20, 30, 80, 80, color(255, 0, 0, 20), 0, "ほのお");
+  buttons[1]=new Button(110, 30, 80, 80, color(0, 0, 255, 20), 0, "みず");
+  buttons[2]=new Button(20, 120, 80, 80, color(0, 255, 0, 20), 0, "くさ");
+  buttons[3]=new Button(110, 120, 80, 80, color(255, 2550, 0, 20), 0, "でんき");
+  buttons[4]=new Button(20, 210, 80, 80, color(130, 20), 0, "ノーマル");
+  buttons[5]=new Button(110, 210, 80, 80, color(255, 20), 0, "選択なし");
+}

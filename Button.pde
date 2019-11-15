@@ -66,4 +66,3 @@ class Button {
     rect(x, y+h, 130, 200);
   }
 }
-
